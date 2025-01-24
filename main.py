@@ -16,11 +16,14 @@ GAME_OVER = pygame.transform.scale(pygame.image.load('assets/game_over.png'),(WI
 # Name at the top of the Window
 pygame.display.set_caption("Star wars")
 
-# While loop for keeping the window Alive and checking for keyp presses
-PLAYER_HEIGHT = 80
-PLAYER_WIDTH = 60
-PLAYER_VELOCITY = 5
-PLAYER_VELOCITY_Y = 5
+class sprite:
+    def __init__(self,height,width,velocity_x,velocity_y):
+        self.height = height
+        self.width = width
+        self.velocity_x = velocity_x
+        self.velocity_y = velocity_y
+# ----------------------------------------------------------------------------------------------------------------
+PLAYER = sprite(80,60,5,5)
 # ----------------------------------------------------------------------------------------------------------------
 STAR_WIDTH = 25 
 STAR_HEIGHT = 35
@@ -33,8 +36,8 @@ HEART_HEIGHT = 40
 HEART_WIDTH = 40
 # ----------------------------------------------------------------------------------------------------------------
 HIGHEST_SCORE = 0
-SPACEHIP_IMAGE = pygame.image.load('assets/level1.png')
-SPACESHIP = pygame.transform.scale(SPACEHIP_IMAGE,(PLAYER_WIDTH,PLAYER_HEIGHT))
+SPACESHIP_IMAGE = pygame.image.load('assets/level1.png')
+SPACESHIP = pygame.transform.scale(SPACESHIP_IMAGE,(PLAYER.width,PLAYER.height))
 ASTEROID_IMAGE = pygame.image.load("assets/asteroid.png")
 ASTEROID = pygame.transform.scale(ASTEROID_IMAGE,(STAR_WIDTH,STAR_HEIGHT))
 BULLET_IMAGE = pygame.image.load("assets/bullet.png")
@@ -99,7 +102,7 @@ def main():
     last_bullet = 0
     # Starting position of the Player 4th Quadrant Position
     # Starting coordinates of the Player and its dimensiiions
-    player = pygame.Rect(200,HEIGHT-PLAYER_HEIGHT,PLAYER_WIDTH,PLAYER_HEIGHT)
+    player = pygame.Rect(200,HEIGHT-PLAYER.height,PLAYER.width,PLAYER.height)
     
     # Lets setup the clock obj
     clock = pygame.time.Clock()
@@ -142,14 +145,14 @@ def main():
         # We will need to adjust the speed of the movement of the player atm it is really fast
         # The speed the while runs at determines the speed of the player 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and player.x - PLAYER_VELOCITY >=0 :
-            player.x -= PLAYER_VELOCITY
-        if keys[pygame.K_RIGHT] and player.x + PLAYER_VELOCITY + PLAYER_WIDTH <= WIDTH:
-            player.x += PLAYER_VELOCITY
-        if keys[pygame.K_UP] and player.y - PLAYER_VELOCITY_Y >= 0:
-            player.y -= PLAYER_VELOCITY_Y
-        if keys[pygame.K_DOWN] and player.y + PLAYER_VELOCITY_Y + PLAYER_HEIGHT <= HEIGHT:
-            player.y += PLAYER_VELOCITY_Y
+        if keys[pygame.K_LEFT] and player.x - PLAYER.velocity_x >=0 :
+            player.x -= PLAYER.velocity_x
+        if keys[pygame.K_RIGHT] and player.x + PLAYER.velocity_x + PLAYER_WIDTH <= WIDTH:
+            player.x += PLAYER.velocity_x
+        if keys[pygame.K_UP] and player.y - PLAYER.velocity_y >= 0:
+            player.y -= PLAYER.velocity_y
+        if keys[pygame.K_DOWN] and player.y + PLAYER.velocity_y + PLAYER_HEIGHT <= HEIGHT:
+            player.y += PLAYER.velocity_y
         if keys[pygame.K_SPACE] and  pygame.time.get_ticks() - last_bullet > BULLET_COOLDOWN:
             bullet = pygame.Rect(player.x + player.width//2 - BULLET_WIDTH//2,player.y, BULLET_WIDTH,BULLET_HEIGHT)
             bullets.append(bullet)
