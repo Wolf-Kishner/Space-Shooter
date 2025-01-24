@@ -50,7 +50,7 @@ def restart_game():
     
 def game_over_screen():
     WIN.blit(GAME_OVER,(0,0))
-    lost_text = FONT.render("The Empire won ",1,"red")
+    lost_text = FONT.render("The Empire won ,better luck next time ",1,"red")
     game_over = FONT.render(f"Press ENTER to start the REBELLION",1,"white")
     WIN.blit(lost_text,(WIDTH//2 - lost_text.get_width()//2,HEIGHT//2 - lost_text.get_height()//2))
     WIN.blit(game_over,(WIDTH//2 - game_over.get_width()//2,HEIGHT//2 + game_over.get_height()//2))
