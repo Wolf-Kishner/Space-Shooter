@@ -11,8 +11,8 @@ WIDTH,HEIGHT = 1000,800
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 FONT = pygame.font.SysFont('comicsans',30)
 # Load the Background Image and resize it to the window size
-BG = pygame.transform.scale(pygame.image.load('bg.jpg'),(WIDTH,HEIGHT))
-GAME_OVER = pygame.transform.scale(pygame.image.load('game_over.png'),(WIDTH,HEIGHT))
+BG = pygame.transform.scale(pygame.image.load('assets/bg.jpg'),(WIDTH,HEIGHT))
+GAME_OVER = pygame.transform.scale(pygame.image.load('assets/game_over.png'),(WIDTH,HEIGHT))
 # Name at the top of the Window
 pygame.display.set_caption("Star wars")
 
@@ -33,15 +33,15 @@ HEART_HEIGHT = 40
 HEART_WIDTH = 40
 # ----------------------------------------------------------------------------------------------------------------
 HIGHEST_SCORE = 0
-SPACEHIP_IMAGE = pygame.image.load('level1.png')
+SPACEHIP_IMAGE = pygame.image.load('assets/level1.png')
 SPACESHIP = pygame.transform.scale(SPACEHIP_IMAGE,(PLAYER_WIDTH,PLAYER_HEIGHT))
-ASTEROID_IMAGE = pygame.image.load("asteroid.png")
+ASTEROID_IMAGE = pygame.image.load("assets/asteroid.png")
 ASTEROID = pygame.transform.scale(ASTEROID_IMAGE,(STAR_WIDTH,STAR_HEIGHT))
-BULLET_IMAGE = pygame.image.load("bullet.png")
+BULLET_IMAGE = pygame.image.load("assets/bullet.png")
 BULLET = pygame.transform.scale(BULLET_IMAGE,(BULLET_WIDTH,BULLET_HEIGHT))
-HEART = pygame.transform.scale(pygame.image.load("health.png"),(HEART_WIDTH,HEART_HEIGHT))
+HEART = pygame.transform.scale(pygame.image.load("assets/health.png"),(HEART_WIDTH,HEART_HEIGHT))
 # ----------------------------------------------------------------------------------------------------------------
-playlist = ["bg_music.mp3","you_lose.mp3","blaster.mp3","darth.mp3"]
+playlist = ["assets/bg_music.mp3","assets/you_lose.mp3","assets/blaster.mp3","assets/darth.mp3"]
 
 # ----------------------------------------------------------------------------------------------------------------
 
