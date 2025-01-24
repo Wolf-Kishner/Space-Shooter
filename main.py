@@ -24,13 +24,9 @@ class sprite:
         self.velocity_y = velocity_y
 # ----------------------------------------------------------------------------------------------------------------
 PLAYER = sprite(80,60,5,5)
+STAR = sprite(25,35,5,5)
+BULLET = sprite(15,15,5,5)
 # ----------------------------------------------------------------------------------------------------------------
-STAR_WIDTH = 25 
-STAR_HEIGHT = 35
-STAR_VELOCITY = 5
-BULLET_WIDTH = 15
-BULLET_HEIGHT = 15
-BULLET_VELOCITY = 5
 BULLET_COOLDOWN = 500
 HEART_HEIGHT = 40
 HEART_WIDTH = 40
@@ -39,9 +35,9 @@ HIGHEST_SCORE = 0
 SPACESHIP_IMAGE = pygame.image.load('assets/level1.png')
 SPACESHIP = pygame.transform.scale(SPACESHIP_IMAGE,(PLAYER.width,PLAYER.height))
 ASTEROID_IMAGE = pygame.image.load("assets/asteroid.png")
-ASTEROID = pygame.transform.scale(ASTEROID_IMAGE,(STAR_WIDTH,STAR_HEIGHT))
+ASTEROID = pygame.transform.scale(ASTEROID_IMAGE,(STAR.width,STAR.height))
 BULLET_IMAGE = pygame.image.load("assets/bullet.png")
-BULLET = pygame.transform.scale(BULLET_IMAGE,(BULLET_WIDTH,BULLET_HEIGHT))
+BULLET = pygame.transform.scale(BULLET_IMAGE,(BULLET.width,BULLET.height))
 HEART = pygame.transform.scale(pygame.image.load("assets/health.png"),(HEART_WIDTH,HEART_HEIGHT))
 # ----------------------------------------------------------------------------------------------------------------
 playlist = ["assets/bg_music.mp3","assets/you_lose.mp3","assets/blaster.mp3","assets/darth.mp3"]
@@ -129,9 +125,9 @@ def main():
         if star_count > star_add_increment :
             for _ in range(3):
                 # This generates 3 stars everytime that cond is satisfied
-                star_x = random.randint(0,WIDTH-STAR_WIDTH)
+                star_x = random.randint(0,WIDTH-STAR.width)
                 # negative dilay so that it apperas from the top of the screen
-                star = pygame.Rect(star_x,-STAR_HEIGHT,STAR_WIDTH,STAR_HEIGHT) 
+                star = pygame.Rect(star_x,-STAR.width,STAR.width,STAR.height) 
                 stars.append(star)
             # The time in which we are incrementing our star
             star_add_increment = max(200,star_add_increment - 50)
@@ -147,21 +143,21 @@ def main():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and player.x - PLAYER.velocity_x >=0 :
             player.x -= PLAYER.velocity_x
-        if keys[pygame.K_RIGHT] and player.x + PLAYER.velocity_x + PLAYER_WIDTH <= WIDTH:
+        if keys[pygame.K_RIGHT] and player.x + PLAYER.velocity_x + PLAYER.width <= WIDTH:
             player.x += PLAYER.velocity_x
         if keys[pygame.K_UP] and player.y - PLAYER.velocity_y >= 0:
             player.y -= PLAYER.velocity_y
-        if keys[pygame.K_DOWN] and player.y + PLAYER.velocity_y + PLAYER_HEIGHT <= HEIGHT:
+        if keys[pygame.K_DOWN] and player.y + PLAYER.velocity_y + PLAYER.height <= HEIGHT:
             player.y += PLAYER.velocity_y
         if keys[pygame.K_SPACE] and  pygame.time.get_ticks() - last_bullet > BULLET_COOLDOWN:
-            bullet = pygame.Rect(player.x + player.width//2 - BULLET_WIDTH//2,player.y, BULLET_WIDTH,BULLET_HEIGHT)
+            bullet = pygame.Rect(player.x + player.width//2 - BULLET.width//2,player.y, BULLET.width,BULLET.height)
             bullets.append(bullet)
             blaster_sound = pygame.mixer.Sound(playlist[2])
             blaster_sound.play()
             last_bullet = pygame.time.get_ticks()
         
         for bullet in bullets[:]:
-                bullet.y -= BULLET_VELOCITY
+                bullet.y -= BULLET.velocity_y
                 if bullet.y <= 0:
                     bullets.remove(bullet)
                 for star in stars[:]:
@@ -172,7 +168,7 @@ def main():
                         break
         # Looping through the copy
         for star in stars[:]:
-            star.y += STAR_VELOCITY
+            star.y += STAR.velocity_y
             if star.y > HEIGHT:
                 stars.remove(star)
             elif star.y  + star.height >= player.y and star.colliderect(player):
