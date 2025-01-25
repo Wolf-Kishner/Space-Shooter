@@ -11,23 +11,29 @@ WIDTH,HEIGHT = 1000,800
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 FONT = pygame.font.SysFont('comicsans',30)
 # Load the Background Image and resize it to the window size
-BG = pygame.transform.scale(pygame.image.load('assets/bg.jpg'),(WIDTH,HEIGHT))
+bg_image = ["assets/bg_01.jpg","assets/bg_02.jpg","assets/bg_03.webp"]
+BG = pygame.transform.scale(pygame.image.load(bg_image[0]),(WIDTH,HEIGHT))
 GAME_OVER = pygame.transform.scale(pygame.image.load('assets/game_over.png'),(WIDTH,HEIGHT))
 # Name at the top of the Window
 pygame.display.set_caption("Star wars")
 
-class sprite:
+def update_background():
+    global BG
+    if current_level < len(bg_image):
+        BG = pygame.transform.scale(pygame.image.load(bg_image[current_level]), (WIDTH, HEIGHT))
+
+class Sprite:
     def __init__(self,height,width,velocity_x,velocity_y):
         self.height = height
         self.width = width
         self.velocity_x = velocity_x
         self.velocity_y = velocity_y
 # ----------------------------------------------------------------------------------------------------------------
-PLAYER = sprite(80,60,5,5)
-STAR = sprite(25,35,5,5)
-BULLET = sprite(15,15,5,5)
+PLAYER = Sprite(80,60,5,5)
+STAR = Sprite(25,35,5,5)
+BULLET = Sprite(15,15,5,5)
 # ----------------------------------------------------------------------------------------------------------------
-BULLET_COOLDOWN = 500
+BULLET_COOLDOWN = 400
 HEART_HEIGHT = 40
 HEART_WIDTH = 40
 # ----------------------------------------------------------------------------------------------------------------
@@ -37,7 +43,7 @@ SPACESHIP = pygame.transform.scale(SPACESHIP_IMAGE,(PLAYER.width,PLAYER.height))
 ASTEROID_IMAGE = pygame.image.load("assets/asteroid.png")
 ASTEROID = pygame.transform.scale(ASTEROID_IMAGE,(STAR.width,STAR.height))
 BULLET_IMAGE = pygame.image.load("assets/bullet.png")
-BULLET = pygame.transform.scale(BULLET_IMAGE,(BULLET.width,BULLET.height))
+BULLET_IMG = pygame.transform.scale(BULLET_IMAGE,(BULLET.width,BULLET.height))
 HEART = pygame.transform.scale(pygame.image.load("assets/health.png"),(HEART_WIDTH,HEART_HEIGHT))
 # ----------------------------------------------------------------------------------------------------------------
 playlist = ["assets/bg_music.mp3","assets/you_lose.mp3","assets/blaster.mp3","assets/darth.mp3"]
@@ -75,14 +81,16 @@ def draw(player,elapsed_time,stars,bullets):
     time_text = FONT.render(f"Time:{round(elapsed_time)}s",1,("white"))
     score = FONT.render(f"Score: {HIGHEST_SCORE}",1,"white")
     health = FONT.render(f"Health: {HEALTH}",1,"red")
+    level = FONT.render(f"Level:{current_level + 1 }",1,"white")
     WIN.blit(time_text,(10,10))
     WIN.blit(score,(10,40))
+    WIN.blit(level,(10,70))
     WIN.blit(HEART,(750,10))
     WIN.blit(health,(800,10))
     WIN.blit(SPACESHIP,(player.x,player.y))
     # Update the display
     for bullet in bullets:
-        WIN.blit(BULLET, (bullet.x, bullet.y))
+        WIN.blit(BULLET_IMG, (bullet.x, bullet.y))
     for star in stars:
         WIN.blit(ASTEROID,(star.x,star.y))
     pygame.display.update()
@@ -93,6 +101,8 @@ def main():
     global last_bullet
     global HIGHEST_SCORE
     global HEALTH 
+    global current_level
+    current_level = 0
     HEALTH = 100 
     HIGHEST_SCORE = 0
     last_bullet = 0
@@ -105,7 +115,7 @@ def main():
     start_time = time.time()
     elapsed_time = 0
 
-    # ADDING THE PROJECTILES
+    # ADDING THE PROJECTILES 
     star_add_increment = 2000
     star_count = 0 
     stars = []
@@ -123,7 +133,7 @@ def main():
         star_count += clock.tick(60) # 60 frames per second
         elapsed_time = time.time() - start_time
         if star_count > star_add_increment :
-            for _ in range(3):
+            for _ in range(current_level + 2 ):
                 # This generates 3 stars everytime that cond is satisfied
                 star_x = random.randint(0,WIDTH-STAR.width)
                 # negative dilay so that it apperas from the top of the screen
@@ -162,7 +172,11 @@ def main():
                     bullets.remove(bullet)
                 for star in stars[:]:
                     if bullet.colliderect(star):
+                        
                         HIGHEST_SCORE += 1 
+                        if(HIGHEST_SCORE % 10 == 0):
+                            current_level += 1
+                            update_background()
                         stars.remove(star)
                         bullets.remove(bullet)
                         break
